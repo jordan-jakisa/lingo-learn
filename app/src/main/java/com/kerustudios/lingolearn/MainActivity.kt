@@ -21,7 +21,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navHostController = rememberNavController()
-            LingoLearnTheme {
+            LingoLearnTheme(
+                darkTheme = true
+            ) {
                 Navigation(navHostController)
             }
         }
