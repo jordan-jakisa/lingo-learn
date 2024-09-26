@@ -20,7 +20,10 @@ fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) 
 
         composable<PracticePage> {
             val practicePage = it.toRoute<PracticePage>()
-            PracticeScreen(navController = navController, topic = practicePage.topic)
+            PracticeScreen(
+                navController = navController,
+                topic = practicePage.topic
+            )
         }
 
     }

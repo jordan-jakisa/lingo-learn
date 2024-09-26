@@ -86,7 +86,7 @@ fun HomeCard(
     onClick: (String) -> Unit
 ) {
     var isExpanded by rememberSaveable {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
     var topic by rememberSaveable {
