@@ -22,11 +22,14 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -36,18 +39,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.kerustudios.lingolearn.data.models.QuizQuestion
 import com.kerustudios.lingolearn.utils.isCorrect
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PracticeScreen(
     modifier: Modifier = Modifier,
@@ -58,34 +60,39 @@ fun PracticeScreen(
     val uiState by viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.surface),
-    ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            IconButton(onClick = { navController.navigateUp() }) {
-                Icon(imageVector = Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "")
-            }
-            Text(
-                text = "practice", fontSize = 12.sp, modifier = Modifier
-                    .alpha(.6f)
-                    .weight(1f)
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Practice") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                            contentDescription = ""
+                        )
+                    }
+                }
             )
-            IconButton(onClick = { }) {}
         }
-
+    ) {
         Column(
-            modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Center
+            modifier = modifier
+                .fillMaxSize()
+                .padding(it)
+                .background(color = MaterialTheme.colorScheme.surface),
         ) {
-            uiState.quiz?.let { quiz ->
-                val pagerState = rememberPagerState(pageCount = { quiz.quiz.size })
-                HorizontalPager(state = pagerState) {
-                    val question = quiz.quiz[it]
-                    QuizCard(question = question) {
-                        coroutineScope.launch {
-                            if (it < quiz.quiz.size - 1) {
-                                pagerState.animateScrollToPage(it + 1)
+            Column(
+                modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Center
+            ) {
+                uiState.quiz?.let { quiz ->
+                    val pagerState = rememberPagerState(pageCount = { quiz.quiz.size })
+                    HorizontalPager(state = pagerState) {
+                        val question = quiz.quiz[it]
+                        QuizCard(question = question) {
+                            coroutineScope.launch {
+                                if (it < quiz.quiz.size - 1) {
+                                    pagerState.animateScrollToPage(it + 1)
+                                }
                             }
                         }
                     }
@@ -93,6 +100,7 @@ fun PracticeScreen(
             }
         }
     }
+
 }
 
 @Composable
@@ -104,11 +112,7 @@ fun QuizCard(question: QuizQuestion, scrollNext: () -> Unit = {}) {
     Card(
         modifier = Modifier
             .clip(RoundedCornerShape(32.dp))
-            .fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White,
-            contentColor = Color.Black
-        )
+            .fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(32.dp)) {
             Text(text = question.question, fontWeight = FontWeight.Bold)

@@ -74,7 +74,9 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeCard(
-    modifier: Modifier = Modifier, title: String, subtitle: String, onClick: (String) -> Unit
+    modifier: Modifier = Modifier,
+    title: String,
+    subtitle: String, onClick: (String) -> Unit
 ) {
     var isExpanded by rememberSaveable {
         mutableStateOf(false)

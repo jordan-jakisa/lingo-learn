@@ -1,6 +1,5 @@
 package com.kerustudios.lingolearn.ui.pages
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,13 +33,16 @@ class PracticeViewModel @Inject constructor(
     }
 
 
-
     suspend fun getQuiz(topic: String) {
         val response = llm.getContent<String>(topic).getOrNull()
         response?.let {
-            val quiz = Json.decodeFromString<Quiz>(it)
-            Log.d("response", quiz.toString())
-            _uiState.value = PracticePageUiState(quiz = quiz)
+            try {
+                val quiz = Json.decodeFromString<Quiz>(it)
+                _uiState.value = PracticePageUiState(quiz = quiz)
+            } catch (e: Exception) {
+                _uiState.value = PracticePageUiState(message = e.message ?: "Some error occured!")
+            }
+
         }
     }
 
@@ -48,4 +50,5 @@ class PracticeViewModel @Inject constructor(
 
 data class PracticePageUiState(
     val quiz: Quiz? = null,
+    val message: String? = ""
 )
