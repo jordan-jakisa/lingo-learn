@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,7 +46,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.kerustudios.lingolearn.data.models.QuizQuestion
@@ -78,7 +82,9 @@ fun PracticeScreen(
                 .background(color = MaterialTheme.colorScheme.surface),
         ) {
             Column(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -87,9 +93,17 @@ fun PracticeScreen(
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center,
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth()
                         ) {
-                            Text(text = "Loading...", modifier = Modifier.padding(32.dp))
+                            CircularProgressIndicator()
+
+                            /*CircledDotsProgress(
+                                modifier = Modifier.size(90.dp),
+                                backgroundColor = Color.Gray.copy(alpha = 0.2f),
+                                color = MaterialTheme.colorScheme.primary,
+                            )   */
                         }
                     }
 
@@ -97,24 +111,28 @@ fun PracticeScreen(
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center,
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth()
                         ) {
                             Text(
                                 text = "Uh-oh🥲 \nSomething went wrong, click the button below to retry!",
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                textAlign = TextAlign.Center
                             )
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(32.dp))
                             IconButton(
                                 onClick = { viewModel.getQuiz(topic ?: "German") },
                                 colors = IconButtonDefaults.iconButtonColors(
                                     containerColor = MaterialTheme.colorScheme.primary,
                                     contentColor = MaterialTheme.colorScheme.onPrimary
-                                )
+                                ),
+                                modifier = Modifier.size(62.dp)
                             ) {
                                 Icon(
                                     imageVector = Icons.Rounded.Refresh,
                                     contentDescription = "refresh",
-                                    modifier = Modifier.padding(16.dp),
                                 )
                             }
                         }

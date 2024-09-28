@@ -161,16 +161,19 @@ fun HomeCard(
                                 Text(text = "Beginner")
                             }, onClick = {
                                 languageLevel = "Beginner"
+                                isDropDownExpanded = !isDropDownExpanded
                             })
                             DropdownMenuItem(text = {
                                 Text(text = "Intermediate")
                             }, onClick = {
                                 languageLevel = "Intermediate"
+                                isDropDownExpanded = !isDropDownExpanded
                             })
                             DropdownMenuItem(text = {
                                 Text(text = "Advanced")
                             }, onClick = {
                                 languageLevel = "Advanced"
+                                isDropDownExpanded = !isDropDownExpanded
                             })
                         }
                     }
