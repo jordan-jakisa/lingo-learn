@@ -60,21 +60,15 @@ fun PracticeScreen(
     val uiState by viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Practice") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = ""
-                        )
-                    }
-                }
-            )
-        }
-    ) {
+    Scaffold(topBar = {
+        TopAppBar(title = { Text(text = "Practice") }, navigationIcon = {
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = ""
+                )
+            }
+        })
+    }) {
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -84,14 +78,17 @@ fun PracticeScreen(
             Column(
                 modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Center
             ) {
-                uiState.quiz?.let { quiz ->
-                    val pagerState = rememberPagerState(pageCount = { quiz.quiz.size })
-                    HorizontalPager(state = pagerState) {
-                        val question = quiz.quiz[it]
+                if (uiState.message?.isNotEmpty() == true) {
+                    Text(text = uiState.message ?: "AN error occurred!")
+                }
+                uiState.questions?.let { questions ->
+                    val pagerState = rememberPagerState(pageCount = { questions.size })
+                    HorizontalPager(state = pagerState) { index ->
+                        val question = questions[index]
                         QuizCard(question = question) {
                             coroutineScope.launch {
-                                if (it < quiz.quiz.size - 1) {
-                                    pagerState.animateScrollToPage(it + 1)
+                                if (index < questions.size - 1) {
+                                    pagerState.animateScrollToPage(index + 1)
                                 }
                             }
                         }
@@ -170,7 +167,6 @@ fun QuizCard(question: QuizQuestion, scrollNext: () -> Unit = {}) {
                             tint = if (selectedAnswer.isCorrect(question.answer)) Color.Green else Color.Red
                         )
                     }
-
                 }
             }
             Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {

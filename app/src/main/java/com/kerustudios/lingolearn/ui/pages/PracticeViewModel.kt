@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.kerustudios.lingolearn.data.models.Quiz
+import com.kerustudios.lingolearn.data.models.QuizQuestion
 import com.kerustudios.lingolearn.data.repositories.LLM
 import com.kerustudios.lingolearn.ui.navigation.PracticePage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,14 +33,14 @@ class PracticeViewModel @Inject constructor(
     }
 
 
-    suspend fun getQuiz(topic: String) {
+    private suspend fun getQuiz(topic: String) {
         val response = llm.getContent<String>(topic).getOrNull()
         response?.let {
             try {
-                val quiz = Json.decodeFromString<Quiz>(it)
-                _uiState.value = PracticePageUiState(quiz = quiz)
+                val questions = Json.decodeFromString<List<QuizQuestion>>(it)
+                _uiState.value = PracticePageUiState(questions = questions)
             } catch (e: Exception) {
-                _uiState.value = PracticePageUiState(message = e.message ?: "Some error occured!")
+                _uiState.value = PracticePageUiState(message = e.message ?: "Some error occurred!")
             }
 
         }
@@ -49,6 +49,6 @@ class PracticeViewModel @Inject constructor(
 }
 
 data class PracticePageUiState(
-    val quiz: Quiz? = null,
+    val questions: List<QuizQuestion>? = null,
     val message: String? = ""
 )

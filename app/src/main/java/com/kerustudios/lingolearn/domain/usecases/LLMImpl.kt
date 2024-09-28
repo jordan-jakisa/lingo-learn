@@ -10,8 +10,10 @@ class LLMImpl @Inject constructor(
 ) : LLM {
 
     override suspend fun <T> getContent(prompt: String): Result<T> {
-        val response = generativeModel.generateContent(prompt)
+
         val aiPrompt = """
+            Generate a random scenario where a conversation can be held, then generate a quiz based
+            on the conversation.
             Generate for me practice quiz for $prompt
             Question: {
                             'question': string,
@@ -20,6 +22,8 @@ class LLMImpl @Inject constructor(
                           }
             Return: Array<Question>
         """.trimIndent()
+
+        val response = generativeModel.generateContent(aiPrompt)
 
         return if (response.text != null) {
             Log.d("response", response.text ?: "Null or empty")

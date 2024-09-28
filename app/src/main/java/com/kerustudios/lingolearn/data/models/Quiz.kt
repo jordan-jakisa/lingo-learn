@@ -8,8 +8,3 @@ data class QuizQuestion(
     val options: List<String>,
     val answer: String
 )
-
-@Serializable
-data class Quiz(
-    val quiz: List<QuizQuestion>
-)
