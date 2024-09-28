@@ -19,12 +19,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -76,19 +78,58 @@ fun PracticeScreen(
                 .background(color = MaterialTheme.colorScheme.surface),
         ) {
             Column(
-                modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Center
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (uiState.message?.isNotEmpty() == true) {
-                    Text(text = uiState.message ?: "AN error occurred!")
-                }
-                uiState.questions?.let { questions ->
-                    val pagerState = rememberPagerState(pageCount = { questions.size })
-                    HorizontalPager(state = pagerState) { index ->
-                        val question = questions[index]
-                        QuizCard(question = question) {
-                            coroutineScope.launch {
-                                if (index < questions.size - 1) {
-                                    pagerState.animateScrollToPage(index + 1)
+                when (uiState.pageState) {
+                    PageState.Loading -> {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(text = "Loading...", modifier = Modifier.padding(32.dp))
+                        }
+                    }
+
+                    PageState.Error -> {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(
+                                text = "Uh-oh🥲 \nSomething went wrong, click the button below to retry!",
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            IconButton(
+                                onClick = { viewModel.getQuiz(topic ?: "German") },
+                                colors = IconButtonDefaults.iconButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.primary,
+                                    contentColor = MaterialTheme.colorScheme.onPrimary
+                                )
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Refresh,
+                                    contentDescription = "refresh",
+                                    modifier = Modifier.padding(16.dp),
+                                )
+                            }
+                        }
+                    }
+
+                    PageState.Success -> {
+                        val questions = uiState.questions ?: emptyList()
+                        val pagerState = rememberPagerState(pageCount = { questions.size })
+                        HorizontalPager(state = pagerState) { index ->
+                            val question = questions[index]
+                            QuizCard(question = question) {
+                                coroutineScope.launch {
+                                    if (index < questions.size - 1) {
+                                        pagerState.animateScrollToPage(index + 1)
+                                    }
                                 }
                             }
                         }

@@ -1,11 +1,13 @@
 package com.kerustudios.lingolearn.ui.pages
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,6 +35,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +50,7 @@ import com.kerustudios.lingolearn.ui.navigation.PracticePage
 fun HomeScreen(
     navController: NavHostController
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .padding(vertical = 16.dp)
@@ -63,10 +68,12 @@ fun HomeScreen(
         )
 
         HomeCard(title = "practice",
-            subtitle = "learn new words and phrases",
+            subtitle = "practice new words and improve your vocabulary",
             modifier = Modifier.padding(top = 16.dp),
-            onClick = { topic ->
-                navController.navigate(PracticePage(topic))
+            onClick = { language ->
+                if (language.isNotEmpty())
+                    navController.navigate(PracticePage(language))
+                else Toast.makeText(context, "Please, enter a language!", Toast.LENGTH_SHORT).show()
             })
     }
 }
@@ -74,9 +81,7 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeCard(
-    modifier: Modifier = Modifier,
-    title: String,
-    subtitle: String, onClick: (String) -> Unit
+    modifier: Modifier = Modifier, title: String, subtitle: String, onClick: (String) -> Unit
 ) {
     var isExpanded by rememberSaveable {
         mutableStateOf(false)
@@ -97,83 +102,92 @@ fun HomeCard(
         onClick = { isExpanded = !isExpanded },
         shape = RoundedCornerShape(32.dp),
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(32.dp),
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Text(text = title, fontSize = 36.sp, modifier = Modifier)
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = subtitle, modifier = Modifier)
-                Spacer(modifier = Modifier.height(16.dp))
-                AnimatedVisibility(visible = isExpanded) {
-                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        OutlinedTextField(
-                            value = topic,
-                            onValueChange = { topic = it },
-                            placeholder = { Text("Enter a topic to practice ...") },
-                            shape = RoundedCornerShape(16.dp),
+        Column(modifier = Modifier.padding(32.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(text = title, fontSize = 36.sp, modifier = Modifier)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = subtitle, modifier = Modifier)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+                Icon(
+                    imageVector = if (isExpanded) Icons.Rounded.KeyboardArrowUp else Icons.Rounded.KeyboardArrowDown,
+                    contentDescription = "",
+                )
+
+            }
+            AnimatedVisibility(
+                visible = isExpanded, modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    OutlinedTextField(
+                        value = topic,
+                        onValueChange = { topic = it },
+                        placeholder = { Text("Enter language to practice ...") },
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    ExposedDropdownMenuBox(
+                        expanded = isDropDownExpanded, onExpandedChange = {
+                            isDropDownExpanded = !isDropDownExpanded
+                        }, modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp))
+                    ) {
+                        TextField(
+                            value = languageLevel,
+                            onValueChange = {},
+                            readOnly = true,
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropDownExpanded) },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth()
                         )
-                        Spacer(modifier = Modifier.width(16.dp))
-                        ExposedDropdownMenuBox(
+
+                        ExposedDropdownMenu(
                             expanded = isDropDownExpanded,
-                            onExpandedChange = {
-                                isDropDownExpanded = !isDropDownExpanded
-                            },
-                            modifier = Modifier.fillMaxWidth()
+                            onDismissRequest = { isDropDownExpanded = !isDropDownExpanded },
+                            modifier = Modifier.fillMaxHeight()
                         ) {
-                            TextField(
-                                value = languageLevel,
-                                onValueChange = {},
-                                readOnly = true,
-                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropDownExpanded) },
-                                modifier = Modifier.menuAnchor()
-                            )
-
-                            ExposedDropdownMenu(
-                                expanded = isDropDownExpanded,
-                                onDismissRequest = { isDropDownExpanded = !isDropDownExpanded }
-                            ) {
-                                DropdownMenuItem(
-                                    text = {
-                                        Text(text = "Beginner")
-                                    },
-                                    onClick = {
-                                        languageLevel = "Beginner"
-                                    })
-                                DropdownMenuItem(
-                                    text = {
-                                        Text(text = "Intermediate")
-                                    },
-                                    onClick = {
-                                        languageLevel = "Intermediate"
-                                    })
-                                DropdownMenuItem(
-                                    text = {
-                                        Text(text = "Advanced")
-                                    },
-                                    onClick = {
-                                        languageLevel = "Advanced"
-                                    })
-                            }
+                            DropdownMenuItem(text = {
+                                Text(text = "Beginner")
+                            }, onClick = {
+                                languageLevel = "Beginner"
+                            })
+                            DropdownMenuItem(text = {
+                                Text(text = "Intermediate")
+                            }, onClick = {
+                                languageLevel = "Intermediate"
+                            })
+                            DropdownMenuItem(text = {
+                                Text(text = "Advanced")
+                            }, onClick = {
+                                languageLevel = "Advanced"
+                            })
                         }
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Button(
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = { onClick("I want to practice $topic in the $languageLevel level") }) {
-                            Text(text = "Start Practice")
-                        }
-
                     }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Button(
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(44.dp),
+                        onClick = { onClick("$languageLevel $topic") }
+                    ) {
+                        Text(text = "Start Practice")
+                    }
+
                 }
             }
-            Icon(
-                imageVector = if (isExpanded) Icons.Rounded.KeyboardArrowUp else Icons.Rounded.KeyboardArrowDown,
-                contentDescription = "",
-            )
+
         }
     }
 }

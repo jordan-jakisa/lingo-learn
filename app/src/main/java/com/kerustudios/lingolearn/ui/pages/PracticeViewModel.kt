@@ -33,22 +33,40 @@ class PracticeViewModel @Inject constructor(
     }
 
 
-    private suspend fun getQuiz(topic: String) {
-        val response = llm.getContent<String>(topic).getOrNull()
-        response?.let {
-            try {
-                val questions = Json.decodeFromString<List<QuizQuestion>>(it)
-                _uiState.value = PracticePageUiState(questions = questions)
-            } catch (e: Exception) {
-                _uiState.value = PracticePageUiState(message = e.message ?: "Some error occurred!")
-            }
+    fun getQuiz(topic: String) {
+        viewModelScope.launch {
 
+            _uiState.value = PracticePageUiState(
+                pageState = PageState.Loading
+            )
+            val response = llm.getContent<String>(topic).getOrNull()
+            response?.let {
+                try {
+                    val questions = Json.decodeFromString<List<QuizQuestion>>(it)
+                    _uiState.value = PracticePageUiState(
+                        questions = questions,
+                        pageState = PageState.Success
+                    )
+                } catch (e: Exception) {
+                    _uiState.value =
+                        PracticePageUiState(
+                            message = e.message ?: "Some error occurred!",
+                            pageState = PageState.Error
+                        )
+                }
+            }
         }
     }
-
 }
 
 data class PracticePageUiState(
     val questions: List<QuizQuestion>? = null,
-    val message: String? = ""
+    val message: String? = "",
+    val pageState: PageState = PageState.Loading
 )
+
+sealed class PageState {
+    data object Loading : PageState()
+    data object Error : PageState()
+    data object Success : PageState()
+}
