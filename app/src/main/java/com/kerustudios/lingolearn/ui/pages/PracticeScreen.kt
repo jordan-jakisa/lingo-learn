@@ -143,7 +143,10 @@ fun PracticeScreen(
                         val pagerState = rememberPagerState(pageCount = { questions.size })
                         HorizontalPager(state = pagerState) { index ->
                             val question = questions[index]
-                            QuizCard(question = question) {
+                            QuizCard(
+                                question = question,
+                                isLastPage = index == questions.size - 1
+                            ) {
                                 coroutineScope.launch {
                                     if (index < questions.size - 1) {
                                         pagerState.animateScrollToPage(index + 1)
@@ -160,7 +163,11 @@ fun PracticeScreen(
 }
 
 @Composable
-fun QuizCard(question: QuizQuestion, scrollNext: () -> Unit = {}) {
+fun QuizCard(
+    question: QuizQuestion,
+    isLastPage: Boolean,
+    scrollNext: () -> Unit = {},
+) {
     var selectedAnswer by rememberSaveable {
         mutableStateOf("")
     }
@@ -229,9 +236,12 @@ fun QuizCard(question: QuizQuestion, scrollNext: () -> Unit = {}) {
                 }
             }
             Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-                Button(onClick = { scrollNext() }, modifier = Modifier.padding(top = 16.dp)) {
-                    Text(text = "Next")
+                if (!isLastPage) {
+                    Button(onClick = { scrollNext() }, modifier = Modifier.padding(top = 16.dp)) {
+                        Text(text = "Next")
+                    }
                 }
+
             }
         }
     }
