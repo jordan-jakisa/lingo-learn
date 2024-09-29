@@ -155,7 +155,7 @@ fun HomeCard(
                         ExposedDropdownMenu(
                             expanded = isDropDownExpanded,
                             onDismissRequest = { isDropDownExpanded = !isDropDownExpanded },
-                            modifier = Modifier.fillMaxHeight()
+                            modifier = Modifier
                         ) {
                             DropdownMenuItem(text = {
                                 Text(text = "Beginner")

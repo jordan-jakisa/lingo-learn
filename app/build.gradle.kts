@@ -81,6 +81,8 @@ dependencies {
     kapt(libs.hilt.android.compiler)
 
     implementation(libs.androidx.hilt.navigation.compose)
+    //implementation("com.abdullahalhakimi:smoothmotion:1.0.0")
+
 
 
 }
