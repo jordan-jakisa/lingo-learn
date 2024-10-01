@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -6,6 +8,7 @@ plugins {
 
     alias(libs.plugins.dagger.hilt)
     kotlin("kapt")
+    alias(libs.plugins.google.gms.google.services)
 
 }
 
@@ -24,6 +27,14 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val properties = Properties().apply {
+            load(project.rootProject.file("local.properties").inputStream())
+        }
+
+        buildConfigField("String", "GEMINI_API_KEY", properties.getProperty("GEMINI_API_KEY").toString())
+
+
     }
 
     buildTypes {
@@ -44,6 +55,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -67,6 +79,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

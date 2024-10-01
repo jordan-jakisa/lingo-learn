@@ -1,10 +1,9 @@
 package com.kerustudios.lingolearn.di
 
 import com.google.ai.client.generativeai.GenerativeModel
-import com.google.ai.client.generativeai.type.FunctionType
-import com.google.ai.client.generativeai.type.Schema
 import com.google.ai.client.generativeai.type.content
 import com.google.ai.client.generativeai.type.generationConfig
+import com.kerustudios.lingolearn.BuildConfig
 import com.kerustudios.lingolearn.data.repositories.LLM
 import com.kerustudios.lingolearn.domain.usecases.LLMImpl
 import dagger.Module
@@ -22,7 +21,7 @@ object AIModule {
     fun providesGenerativeModel(): GenerativeModel {
         return GenerativeModel(
             "gemini-1.5-flash-002",
-            "AIzaSyDN-0hmFERMePofvFgwxWLcaQ2QXLndjfU",
+            BuildConfig.GEMINI_API_KEY,
             generationConfig = generationConfig {
                 temperature = 1f
                 topK = 30
