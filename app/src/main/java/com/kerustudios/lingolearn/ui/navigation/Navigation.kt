@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.kerustudios.lingolearn.ui.pages.AuthScreen
 import com.kerustudios.lingolearn.ui.pages.HomeScreen
 import com.kerustudios.lingolearn.ui.pages.PracticeScreen
 import kotlinx.serialization.Serializable
@@ -26,8 +27,14 @@ fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) 
             )
         }
 
+        composable<AuthPage> {
+            AuthScreen(navController)
+        }
+
     }
 }
+
+
 
 // destinations
 @Serializable
@@ -35,3 +42,6 @@ data object HomePage
 
 @Serializable
 data class PracticePage(val topic: String?)
+
+@Serializable
+data object AuthPage
