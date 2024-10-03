@@ -60,12 +60,10 @@ object AIModule {
         val bytes = rawNonce.toByteArray()
         val md = MessageDigest.getInstance("SHA-256")
         val digest = md.digest(bytes)
-        val hashedNonce = digest.fold("") { str, it ->
-            str + "%02x".format(it)
-        }
+        val hashedNonce = digest.joinToString("") { "%02x".format(it) }
 
         return GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(true)
+            .setFilterByAuthorizedAccounts(false)
             .setServerClientId(BuildConfig.WEB_CLIENT_ID)
             .setAutoSelectEnabled(true)
             .setNonce(hashedNonce)
@@ -83,15 +81,11 @@ object AIModule {
         val bytes = rawNonce.toByteArray()
         val md = MessageDigest.getInstance("SHA-256")
         val digest = md.digest(bytes)
-        val hashedNonce = digest.fold("") { str, it ->
-            str + "%02x".format(it)
-        }
+        val hashedNonce = digest.joinToString("") { "%02x".format(it) }
 
         return GetSignInWithGoogleOption.Builder(BuildConfig.WEB_CLIENT_ID)
             .setNonce(hashedNonce)
             .build()
-
-
     }
 
 }

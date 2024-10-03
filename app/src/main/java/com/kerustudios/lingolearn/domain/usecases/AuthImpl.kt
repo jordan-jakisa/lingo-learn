@@ -26,11 +26,14 @@ class AuthImpl @Inject constructor(
         val signingRequest =
             GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
 
+        Log.d("google_signin", "Signing request: $signingRequest")
+
         return try {
             val credential = credentialManager.getCredential(
                 request = signingRequest,
                 context = context,
             ).credential
+            Log.d("google_signin", "Credential: $credential")
             Log.e("google_signin","Credential success")
             Result.success(credential)
         } catch (e: NoCredentialException) {
