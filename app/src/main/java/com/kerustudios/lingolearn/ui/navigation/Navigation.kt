@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.kerustudios.lingolearn.ui.pages.AuthScreen
 import com.kerustudios.lingolearn.ui.pages.HomeScreen
 import com.kerustudios.lingolearn.ui.pages.PracticeScreen
@@ -13,8 +15,9 @@ import kotlinx.serialization.Serializable
 
 @Composable
 fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) {
+    val startDestination = if (Firebase.auth.currentUser != null) HomePage else AuthPage
 
-    NavHost(navController = navController, startDestination = HomePage) {
+    NavHost(navController = navController, startDestination = startDestination) {
         composable<HomePage> {
             HomeScreen(navController = navController)
         }
@@ -26,14 +29,11 @@ fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) 
                 topic = practicePage.topic
             )
         }
-
         composable<AuthPage> {
             AuthScreen(navController)
         }
-
     }
 }
-
 
 
 // destinations

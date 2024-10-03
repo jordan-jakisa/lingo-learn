@@ -32,7 +32,16 @@ android {
             load(project.rootProject.file("local.properties").inputStream())
         }
 
-        buildConfigField("String", "GEMINI_API_KEY", properties.getProperty("GEMINI_API_KEY").toString())
+        buildConfigField(
+            "String",
+            "GEMINI_API_KEY",
+            properties.getProperty("GEMINI_API_KEY").toString()
+        )
+        buildConfigField(
+            "String",
+            "WEB_CLIENT_ID",
+            properties.getProperty("WEB_CLIENT_ID").toString()
+        )
 
 
     }
@@ -96,6 +105,11 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     //implementation("com.abdullahalhakimi:smoothmotion:1.0.0")
 
+    implementation(libs.play.services.auth)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.google.firebase.auth)
 
 
 }

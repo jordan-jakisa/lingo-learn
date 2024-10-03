@@ -1,6 +1,8 @@
 package com.kerustudios.lingolearn.ui.pages
 
 import android.content.res.Configuration
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,14 +22,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kerustudios.lingolearn.R
 import com.kerustudios.lingolearn.ui.theme.AppTheme
 
 @Composable
-fun AuthScreen(navController: NavHostController) {
-    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+fun AuthScreen(
+    navController: NavHostController,
+    vm: AuthPageViewModel = hiltViewModel()
+) {
+    val startAccountIntentLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+            vm.handleSignIn(null)
+        }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Spacer(modifier = Modifier.weight(1f))
         Image(
             painter = painterResource(id = R.drawable.an_elephant_language),
@@ -36,7 +52,11 @@ fun AuthScreen(navController: NavHostController) {
         )
         Spacer(modifier = Modifier.weight(1f))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                vm.handleSignIn {
+                    startAccountIntentLauncher.launch(it)
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
