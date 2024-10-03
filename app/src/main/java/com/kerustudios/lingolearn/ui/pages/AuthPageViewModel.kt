@@ -9,6 +9,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.kerustudios.lingolearn.BuildConfig
 import com.kerustudios.lingolearn.data.repositories.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +27,10 @@ class AuthPageViewModel @Inject constructor(
 
     private var _uiState = MutableStateFlow(AuthPageState())
     val uiState = _uiState.asStateFlow()
+
+    init {
+        Log.d("google_signin", BuildConfig.WEB_CLIENT_ID)
+    }
 
     fun handleSignIn(launchIntent: ((Intent) -> Unit)?) {
         viewModelScope.launch {
@@ -46,14 +51,30 @@ class AuthPageViewModel @Inject constructor(
                             val user = auth.signInWithCredential(authCredential).await().user
                             user?.run {
                                 //update UI state
+                                _uiState.value = _uiState.value.copy(
+                                    authStatus = AuthStatus.Success("Sign in success")
+                                )
                             }
                         } catch (e: GoogleIdTokenParsingException) {
-                            Log.e("google_signin", "Received an invalid google id token response: ${e.message}", e)
+                            Log.e(
+                                "google_signin",
+                                "Received an invalid google id token response: ${e.message}",
+                                e
+                            )
+                            _uiState.value = _uiState.value.copy(
+                                authStatus = AuthStatus.Error("Error signing in, please try again")
+                            )
                         } catch (e: Exception) {
                             Log.e("google_signin", "Unexpected error: ${e.message}")
+                            _uiState.value = _uiState.value.copy(
+                                authStatus = AuthStatus.Error("Error signing in, please try again")
+                            )
                         }
                     } else {
                         Log.e("google_signin", "Unexpected type of credential")
+                        _uiState.value = _uiState.value.copy(
+                            authStatus = AuthStatus.Error("Error signing in, please try again")
+                        )
                     }
                 }
             }
@@ -62,5 +83,11 @@ class AuthPageViewModel @Inject constructor(
 }
 
 data class AuthPageState(
-    val error: String? = null
+    val authStatus: AuthStatus = AuthStatus.None
 )
+
+sealed class AuthStatus {
+    data object None : AuthStatus()
+    data class Error(val message: String) : AuthStatus()
+    data class Success(val data: Any) : AuthStatus()
+}

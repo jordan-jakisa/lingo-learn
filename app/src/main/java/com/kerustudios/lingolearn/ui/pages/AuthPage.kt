@@ -1,6 +1,7 @@
 package com.kerustudios.lingolearn.ui.pages
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -14,9 +15,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kerustudios.lingolearn.R
+import com.kerustudios.lingolearn.ui.navigation.HomePage
 import com.kerustudios.lingolearn.ui.theme.AppTheme
 
 @Composable
@@ -37,6 +43,20 @@ fun AuthScreen(
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
             vm.handleSignIn(null)
         }
+
+    val uiState by vm.uiState.collectAsState()
+    val context = LocalContext.current
+
+    when (uiState.authStatus) {
+        is AuthStatus.Success -> {
+            navController.navigate(HomePage)
+        }
+
+        is AuthStatus.Error -> {
+            Toast.makeText(context, (uiState.authStatus as AuthStatus.Error).message, Toast.LENGTH_SHORT).show()
+        }
+        AuthStatus.None -> {}
+    }
 
     Column(
         modifier = Modifier

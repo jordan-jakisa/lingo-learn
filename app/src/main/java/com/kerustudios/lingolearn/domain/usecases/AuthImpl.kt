@@ -30,11 +30,10 @@ class AuthImpl @Inject constructor(
 
         return try {
             val credential = credentialManager.getCredential(
-                request = signingRequest,
                 context = context,
+                request = signingRequest
             ).credential
-            Log.d("google_signin", "Credential: $credential")
-            Log.e("google_signin","Credential success")
+
             Result.success(credential)
         } catch (e: NoCredentialException) {
             e.printStackTrace()
