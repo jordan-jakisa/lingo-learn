@@ -14,7 +14,7 @@ class UserRepositoryImpl @Inject constructor(
     private val db: FirebaseFirestore
 ) : UserRepository {
 
-    override suspend fun updatePreferences(language: Language, goals: Set<String>): Result<String> {
+    override suspend fun updatePreferences(language: Language, goals: List<String>): Result<String> {
         val uId = auth.currentUser?.uid
         return try {
             uId?.let {

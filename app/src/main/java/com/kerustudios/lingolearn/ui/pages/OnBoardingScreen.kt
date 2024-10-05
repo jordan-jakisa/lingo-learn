@@ -1,6 +1,5 @@
 package com.kerustudios.lingolearn.ui.pages
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -45,7 +43,7 @@ fun OnBoardingScreen(
 ) {
     val scope = rememberCoroutineScope()
     var selectedLanguage by remember { mutableStateOf<Language?>(null) }
-    var goals: Set<String> = mutableSetOf()
+    var goals: List<String> = mutableListOf()
     val pagerState = rememberPagerState { 2 }
 
     val pages: List<@Composable () -> Unit> =
@@ -58,11 +56,9 @@ fun OnBoardingScreen(
             modifier = Modifier.fillMaxWidth(), language = selectedLanguage?.name ?: ""
         ) {
             goals = it
-            vm.updatePreferences(selectedLanguage!!, goals).also {
-                navController.navigate(HomePage)
-            }
-        }
-        )
+            vm.updatePreferences(selectedLanguage!!, goals)
+            navController.navigate(HomePage)
+        })
 
     Column(
         modifier = modifier
@@ -125,10 +121,10 @@ fun languagePreference(
 
 @Composable
 fun languageGoals(
-    modifier: Modifier = Modifier, language: String, onSave: (Set<String>) -> Unit
+    modifier: Modifier = Modifier, language: String, onSave: (List<String>) -> Unit
 ): @Composable () -> Unit {
     return {
-        val selectedGoals = mutableSetOf<String>()
+        val selectedGoals = mutableListOf<String>()
         val options = listOf(
             "Master the basics",
             "Chat with the native $language speakers",
@@ -144,40 +140,31 @@ fun languageGoals(
             Text(text = "What are your goals?", fontWeight = FontWeight.Bold, fontSize = 24.sp)
             Text(text = "Select all that apply", fontSize = 12.sp, modifier = Modifier.alpha(.5f))
             LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(items = options) {
-                    ElevatedCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .border(
-                                width = 2.dp,
-                                color = if (selectedGoals.contains(it))
-                                    MaterialTheme.colorScheme.primary
-                                else
-                                    Color.Transparent
-                            ),
-                        onClick = {
-                            if (selectedGoals.contains(it))
-                                selectedGoals.remove(it)
-                            else
-                                selectedGoals.add(it)
-                        }
-                    ) {
+                    ElevatedCard(modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            width = 2.dp,
+                            color = if (selectedGoals.contains(it)) MaterialTheme.colorScheme.primary
+                            else Color.Transparent
+                        ), onClick = {
+                        if (selectedGoals.contains(it)) selectedGoals.remove(it)
+                        else selectedGoals.add(it)
+                    }) {
                         Text(
                             text = it,
-                            modifier = Modifier
-                                .padding(16.dp),
+                            modifier = Modifier.padding(16.dp),
                         )
                     }
                 }
             }
             Button(
                 onClick = {
-                    onSave(selectedGoals.toSet())
-                },
-                modifier = Modifier
+                    onSave(selectedGoals)
+
+                }, modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 36.dp)
             ) {

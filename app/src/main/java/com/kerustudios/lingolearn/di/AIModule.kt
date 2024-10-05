@@ -2,6 +2,7 @@ package com.kerustudios.lingolearn.di
 
 import android.content.Context
 import androidx.credentials.CredentialManager
+import androidx.datastore.preferences.preferencesDataStore
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import com.google.ai.client.generativeai.type.generationConfig
@@ -21,6 +22,8 @@ import dagger.hilt.components.SingletonComponent
 import java.security.MessageDigest
 import java.util.UUID
 import javax.inject.Singleton
+
+val Context.dataStore by preferencesDataStore(name = "preferences")
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -91,5 +94,10 @@ object AIModule {
     @Provides
     @Singleton
     fun providesFirebaseFireStore() = Firebase.firestore
+
+
+    @Provides
+    @Singleton
+    fun providesDataStorePreferences(@ApplicationContext context: Context) = context.dataStore
 
 }
