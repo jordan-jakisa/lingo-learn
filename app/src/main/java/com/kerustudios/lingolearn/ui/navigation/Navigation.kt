@@ -10,12 +10,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.kerustudios.lingolearn.ui.pages.AuthScreen
 import com.kerustudios.lingolearn.ui.pages.HomeScreen
+import com.kerustudios.lingolearn.ui.pages.OnBoardingScreen
 import com.kerustudios.lingolearn.ui.pages.PracticeScreen
 import kotlinx.serialization.Serializable
 
 @Composable
 fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) {
-    val startDestination = if (Firebase.auth.currentUser != null) HomePage else AuthPage
+    val startDestination = if (Firebase.auth.currentUser != null) HomePage else OnBoardingPage
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable<HomePage> {
@@ -32,6 +33,10 @@ fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) 
         composable<AuthPage> {
             AuthScreen(navController)
         }
+
+        composable<OnBoardingPage> {
+            OnBoardingScreen(navController, modifier)
+        }
     }
 }
 
@@ -45,3 +50,6 @@ data class PracticePage(val topic: String?)
 
 @Serializable
 data object AuthPage
+
+@Serializable
+data object OnBoardingPage
