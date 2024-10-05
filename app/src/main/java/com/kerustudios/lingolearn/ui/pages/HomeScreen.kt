@@ -68,6 +68,9 @@ fun HomeScreen(
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        Row(modifier = Modifier.fillMaxWidth()){
+            Text(text = uiState.user?.language?.name ?: "", fontSize = 18.sp, )
+        }
         Text(
             text = "LingoLearn",
             style = MaterialTheme.typography.headlineLarge,

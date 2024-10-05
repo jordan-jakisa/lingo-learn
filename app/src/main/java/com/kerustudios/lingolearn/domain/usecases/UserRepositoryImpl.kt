@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kerustudios.lingolearn.data.FirebasePaths
 import com.kerustudios.lingolearn.data.models.Language
+import com.kerustudios.lingolearn.data.models.User
 import com.kerustudios.lingolearn.data.repositories.UserRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -14,7 +15,10 @@ class UserRepositoryImpl @Inject constructor(
     private val db: FirebaseFirestore
 ) : UserRepository {
 
-    override suspend fun updatePreferences(language: Language, goals: List<String>): Result<String> {
+    override suspend fun updatePreferences(
+        language: Language,
+        goals: List<String>
+    ): Result<String> {
         val uId = auth.currentUser?.uid
         return try {
             uId?.let {
@@ -32,6 +36,17 @@ class UserRepositoryImpl @Inject constructor(
                 ).await()
             }
             Result.success("Preferences updated")
+        } catch (e: FirebaseException) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getUserDetails(): Result<User> {
+        return try {
+            val user =
+                db.document(FirebasePaths.UserDocument(auth.currentUser?.uid!!).path).get().await()
+                    .toObject(User::class.java)
+            return Result.success(user!!)
         } catch (e: FirebaseException) {
             Result.failure(e)
         }
