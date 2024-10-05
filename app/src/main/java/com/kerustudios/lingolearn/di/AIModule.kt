@@ -8,6 +8,7 @@ import com.google.ai.client.generativeai.type.generationConfig
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.kerustudios.lingolearn.BuildConfig
 import com.kerustudios.lingolearn.data.repositories.LLM
@@ -63,7 +64,6 @@ object AIModule {
         val hashedNonce = digest.joinToString("") { "%02x".format(it) }
 
         return GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(false)
             .setServerClientId(BuildConfig.WEB_CLIENT_ID)
             .setAutoSelectEnabled(true)
             .setNonce(hashedNonce)
@@ -87,5 +87,9 @@ object AIModule {
             .setNonce(hashedNonce)
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun providesFirebaseFireStore() = Firebase.firestore
 
 }

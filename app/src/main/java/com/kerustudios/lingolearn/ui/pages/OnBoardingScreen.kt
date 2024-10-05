@@ -26,12 +26,18 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.kerustudios.lingolearn.data.models.Language
+import com.kerustudios.lingolearn.ui.navigation.HomePage
 import kotlinx.coroutines.launch
 
 @Composable
-fun OnBoardingScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun OnBoardingScreen(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    vm: OnBoardingScreenViewModel = hiltViewModel()
+) {
     val scope = rememberCoroutineScope()
     var selectedLanguage by rememberSaveable { mutableStateOf<Language?>(null) }
     var goals: Set<String> = mutableSetOf()
@@ -47,7 +53,11 @@ fun OnBoardingScreen(navController: NavHostController, modifier: Modifier = Modi
             modifier = Modifier.fillMaxWidth(), language = selectedLanguage?.name ?: ""
         ) {
             goals = it
-        })
+            vm.updatePreferences(selectedLanguage!!, goals).also {
+                navController.navigate(HomePage)
+            }
+        }
+        )
 
     Column(
         modifier = modifier

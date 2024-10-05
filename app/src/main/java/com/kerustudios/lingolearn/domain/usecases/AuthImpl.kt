@@ -37,13 +37,13 @@ class AuthImpl @Inject constructor(
             Result.success(credential)
         } catch (e: NoCredentialException) {
             e.printStackTrace()
-            Log.e("google_signin"," No credential found: ${e.message}")
+            Log.e("google_signin", " No credential found: ${e.message}")
             launchIntent?.let {
                 launchIntent(getAddGoogleAccountIntent())
             }
             Result.failure(e)
         } catch (e: GetCredentialException) {
-            Log.e("google_signin","Get credential exception: ${e.message}")
+            Log.e("google_signin", "Get credential exception: ${e.message}")
             e.printStackTrace()
             Result.failure(e)
         }
