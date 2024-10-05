@@ -16,7 +16,7 @@ import kotlinx.serialization.Serializable
 
 @Composable
 fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) {
-    val startDestination = if (Firebase.auth.currentUser != null) HomePage else AuthPage
+    val startDestination = if (Firebase.auth.currentUser != null) OnBoardingPage else AuthPage
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable<HomePage> {

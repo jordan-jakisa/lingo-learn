@@ -18,10 +18,16 @@ class UserRepositoryImpl @Inject constructor(
         val uId = auth.currentUser?.uid
         return try {
             uId?.let {
-                db.document(FirebasePaths.UserDocument(it).path).update(
+                db.collection(FirebasePaths.UsersCollection().path).add(
                     hashMapOf(
                         "language" to language.name,
-                        "goals" to goals.toList()
+                        "goals" to goals.toList(),
+                        "uId" to uId,
+                        "picture" to auth.currentUser?.photoUrl,
+                        "name" to auth.currentUser?.displayName,
+                        "email" to auth.currentUser?.email,
+                        "createdAt" to System.currentTimeMillis(),
+                        "phone_number" to auth.currentUser?.phoneNumber
                     )
                 ).await()
             }

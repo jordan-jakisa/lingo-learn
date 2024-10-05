@@ -111,6 +111,5 @@ dependencies {
     implementation(libs.googleid)
     implementation(platform(libs.firebase.bom))
     implementation(libs.google.firebase.auth)
-
-
+    implementation(libs.androidx.datastore.preferences)
 }

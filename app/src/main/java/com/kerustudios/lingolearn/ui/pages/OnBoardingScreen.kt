@@ -1,5 +1,7 @@
 package com.kerustudios.lingolearn.ui.pages
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,15 +16,18 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,7 +44,7 @@ fun OnBoardingScreen(
     vm: OnBoardingScreenViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
-    var selectedLanguage by rememberSaveable { mutableStateOf<Language?>(null) }
+    var selectedLanguage by remember { mutableStateOf<Language?>(null) }
     var goals: Set<String> = mutableSetOf()
     val pagerState = rememberPagerState { 2 }
 
@@ -124,6 +129,15 @@ fun languageGoals(
 ): @Composable () -> Unit {
     return {
         val selectedGoals = mutableSetOf<String>()
+        val options = listOf(
+            "Master the basics",
+            "Chat with the native $language speakers",
+            "Watch a movie in $language",
+            "Learn about the $language culture",
+            "Connect with family and friends",
+            "Impress my colleagues",
+            "Ace my next $language test"
+        )
         Column(
             modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -133,42 +147,35 @@ fun languageGoals(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(
-                    items = listOf(
-                        "Master the basics",
-                        "Chat with the native $language speakers",
-                        "Watch a movie in $language",
-                        "Learn about the $language culture",
-                        "Connect with family and friends",
-                        "Impress my colleagues",
-                        "Ace my next $language test"
-                    )
-                ) {
-                    ElevatedCard(modifier = Modifier.fillMaxWidth(), onClick = {
-                        if (selectedGoals.contains(it))
-                            selectedGoals.remove(it)
-                        else
-                            selectedGoals.add(it)
-                    }) {
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(text = it, modifier = Modifier.padding(16.dp))
-                            Spacer(modifier = Modifier.width(12.dp))
-                            if (selectedGoals.contains(it)) {
-                                Text(
-                                    text = "✅", modifier = Modifier.padding(16.dp)
-                                )
-                            }
+                items(items = options) {
+                    ElevatedCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                width = 2.dp,
+                                color = if (selectedGoals.contains(it))
+                                    MaterialTheme.colorScheme.primary
+                                else
+                                    Color.Transparent
+                            ),
+                        onClick = {
+                            if (selectedGoals.contains(it))
+                                selectedGoals.remove(it)
+                            else
+                                selectedGoals.add(it)
                         }
+                    ) {
+                        Text(
+                            text = it,
+                            modifier = Modifier
+                                .padding(16.dp),
+                        )
                     }
                 }
             }
             Button(
                 onClick = {
                     onSave(selectedGoals.toSet())
-                    // todo: save user preferences
                 },
                 modifier = Modifier
                     .fillMaxWidth()
