@@ -1,8 +1,8 @@
 package com.kerustudios.lingolearn.ui.pages
 
 import android.content.res.Configuration
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,8 +54,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.kerustudios.lingolearn.R
 import com.kerustudios.lingolearn.ui.navigation.OnBoardingPage
-import com.kerustudios.lingolearn.ui.navigation.PracticePage
 
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -78,6 +79,7 @@ fun HomeScreen(
             .padding(vertical = 16.dp)
             .fillMaxSize()
     ) {
+        Spacer(modifier = Modifier.height(32.dp))
         Box(
             modifier = Modifier
                 .clip(CircleShape)
@@ -105,7 +107,7 @@ fun HomeScreen(
                 gapSize = 2.dp,
                 modifier = Modifier.width(90.dp)
             )
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = "2/17",
                 modifier = Modifier.alpha(.5f),
@@ -113,7 +115,7 @@ fun HomeScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Button(onClick = { /*TODO*/ }) {
             Text(text = "Continue")
@@ -137,7 +139,13 @@ fun HomeScreen(
                         modifier = Modifier
                             .width(120.dp)
                             .height(100.dp)
-                    ) {}
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ice_cream),
+                            contentDescription = "",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "Food")
                 }
@@ -148,7 +156,13 @@ fun HomeScreen(
                         modifier = Modifier
                             .width(120.dp)
                             .height(100.dp)
-                    ) {}
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.cake),
+                            contentDescription = "",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "More Foods")
                 }
@@ -159,7 +173,14 @@ fun HomeScreen(
                         modifier = Modifier
                             .width(120.dp)
                             .height(100.dp)
-                    ) {}
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.sandwich),
+                            contentDescription = "",
+                            modifier = Modifier.fillMaxSize()
+                        )
+
+                    }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "Foodie")
                 }
@@ -170,7 +191,14 @@ fun HomeScreen(
                         modifier = Modifier
                             .width(120.dp)
                             .height(100.dp)
-                    ) {}
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.coffee),
+                            contentDescription = "",
+                            modifier = Modifier.fillMaxSize()
+                        )
+
+                    }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "Food")
                 }
@@ -185,7 +213,7 @@ fun HomeScreen(
         )
         Text(
             text = "Words and phrases to use on your travels",
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodySmall
         )
         Spacer(modifier = Modifier.height(16.dp))
         LazyRow(
@@ -198,7 +226,14 @@ fun HomeScreen(
                         modifier = Modifier
                             .width(200.dp)
                             .height(160.dp)
-                    ) {}
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.house),
+                            contentDescription = "",
+                            modifier = Modifier.fillMaxSize()
+                        )
+
+                    }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "Day-tripper")
                 }
@@ -209,7 +244,14 @@ fun HomeScreen(
                         modifier = Modifier
                             .width(200.dp)
                             .height(160.dp)
-                    ) {}
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.airport),
+                            contentDescription = "",
+                            modifier = Modifier.fillMaxSize()
+                        )
+
+                    }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "Airport")
                 }
