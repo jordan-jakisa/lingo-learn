@@ -9,7 +9,8 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.kerustudios.lingolearn.BuildConfig
+import com.google.firebase.firestore.FirebaseFirestore
+import com.kerustudios.lingolearn.data.FirebasePaths
 import com.kerustudios.lingolearn.data.repositories.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,15 +23,12 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthPageViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val auth: FirebaseAuth
+    private val auth: FirebaseAuth,
+    private val db: FirebaseFirestore
 ) : ViewModel() {
 
     private var _uiState = MutableStateFlow(AuthPageState())
     val uiState = _uiState.asStateFlow()
-
-    init {
-        Log.d("google_signin", BuildConfig.WEB_CLIENT_ID)
-    }
 
     fun handleSignIn(launchIntent: ((Intent) -> Unit)?) {
         viewModelScope.launch {
@@ -50,7 +48,17 @@ class AuthPageViewModel @Inject constructor(
                                 GoogleAuthProvider.getCredential(googleIdToken, null)
                             val user = auth.signInWithCredential(authCredential).await().user
                             user?.run {
-                                //update UI state
+                                db.collection(FirebasePaths.UsersCollection().path)
+                                    .document(this.uid).set(
+                                        hashMapOf(
+                                            "uId" to this.uid,
+                                            "email" to this.email,
+                                            "name" to this.displayName,
+                                            "picture" to this.photoUrl,
+                                            "createdAt" to System.currentTimeMillis(),
+                                            "phoneNumber" to auth.currentUser?.phoneNumber
+                                        )
+                                    )
                                 _uiState.value = _uiState.value.copy(
                                     authStatus = AuthStatus.Success("Sign in success")
                                 )

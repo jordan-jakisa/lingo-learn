@@ -10,6 +10,7 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.NoCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.firebase.firestore.FirebaseFirestore
 import com.kerustudios.lingolearn.data.repositories.AuthRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -17,7 +18,8 @@ import javax.inject.Inject
 class AuthImpl @Inject constructor(
     private val googleIdOption: GetGoogleIdOption,
     private val credentialManager: CredentialManager,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val db: FirebaseFirestore
 ) : AuthRepository {
 
     override suspend fun signInUser(
@@ -26,14 +28,11 @@ class AuthImpl @Inject constructor(
         val signingRequest =
             GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
 
-        Log.d("google_signin", "Signing request: $signingRequest")
-
         return try {
             val credential = credentialManager.getCredential(
                 context = context,
                 request = signingRequest
             ).credential
-
             Result.success(credential)
         } catch (e: NoCredentialException) {
             e.printStackTrace()

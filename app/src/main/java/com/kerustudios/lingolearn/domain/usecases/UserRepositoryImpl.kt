@@ -1,5 +1,6 @@
 package com.kerustudios.lingolearn.domain.usecases
 
+import android.util.Log
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,16 +23,10 @@ class UserRepositoryImpl @Inject constructor(
         val uId = auth.currentUser?.uid
         return try {
             uId?.let {
-                db.collection(FirebasePaths.UsersCollection().path).add(
+                db.collection(FirebasePaths.UsersCollection().path).document(uId).update(
                     hashMapOf(
-                        "language" to language.name,
+                        "language" to language,
                         "goals" to goals.toList(),
-                        "uId" to uId,
-                        "picture" to auth.currentUser?.photoUrl,
-                        "name" to auth.currentUser?.displayName,
-                        "email" to auth.currentUser?.email,
-                        "createdAt" to System.currentTimeMillis(),
-                        "phone_number" to auth.currentUser?.phoneNumber
                     )
                 ).await()
             }
@@ -43,10 +38,16 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getUserDetails(): Result<User> {
         return try {
-            val user =
-                db.document(FirebasePaths.UserDocument(auth.currentUser?.uid!!).path).get().await()
-                    .toObject(User::class.java)
-            return Result.success(user!!)
+            val userId = auth.currentUser?.uid
+            val snapshot = db.document(FirebasePaths.UserDocument(userId ?: "").path).get().await()
+            val user = snapshot.toObject(User::class.java)
+            Log.d("UserRepositoryImpl", "User ID: $userId")
+            Log.d("UserRepositoryImpl", "RetrievedDetails: $user")
+            if (user != null) {
+                Result.success(user)
+            } else {
+                Result.failure(FirebaseException("User not found"))
+            }
         } catch (e: FirebaseException) {
             Result.failure(e)
         }
