@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.credentials.CredentialManager
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.Schema
 import com.google.ai.client.generativeai.type.content
 import com.google.ai.client.generativeai.type.generationConfig
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
@@ -41,6 +42,34 @@ object AIModule {
                 topP = 0.95f
                 maxOutputTokens = 8192
                 responseMimeType = "application/json"
+                responseSchema = Schema.arr(
+                    name = "singleQuiz",
+                    description = "A quiz to practice a given language which consists of the question, options and the correct answer. The Quiz is a list of questions",
+                    items = Schema.obj(
+                        name = "question",
+                        description = "The question which is either a multiple choice question or a fill in the blank question",
+                        contents = arrayOf(
+                            Schema.str(
+                                name = "question",
+                                description = "The question in the quiz"
+                            ),
+                            Schema.arr(
+                                name = "options",
+                                description = """The possible answers to the question, make them as diverse as possible and 
+                                   sometimes as similar as possible such that it is not so easy to tell which answers are 
+                                   correct when a user is an advanced learner. The options should always be 4""".trimMargin(),
+                                items = Schema.str(
+                                    name = "option",
+                                    description = "An optional answer for the question"
+                                )
+                            ),
+                            Schema.str(
+                                name = "answer",
+                                description = "The correct answer to the question",
+                            )
+                        )
+                    )
+                )
             },
             systemInstruction = content { text("You are an intelligent system which is supposed to help students practice their language learning by generating quizes for them. Always generate 10 practice questions. Do not include questions which are supposed to have images! And each question should have 4 options for example a, b, c, d, keep the questions in english!") },
         )
