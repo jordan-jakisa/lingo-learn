@@ -144,7 +144,9 @@ fun PracticeScreen(
                         HorizontalPager(state = pagerState) { index ->
                             val question = questions[index]
                             QuizCard(
-                                question = question,
+                                question = question.copy(
+                                    options = question.options.shuffled()
+                                ),
                                 isLastPage = index == questions.size - 1
                             ) {
                                 coroutineScope.launch {

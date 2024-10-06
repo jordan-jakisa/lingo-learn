@@ -37,7 +37,7 @@ object AIModule {
             "gemini-1.5-flash-002",
             BuildConfig.GEMINI_API_KEY,
             generationConfig = generationConfig {
-                temperature = 1f
+                temperature = 0.2f
                 topK = 30
                 topP = 0.95f
                 maxOutputTokens = 8192
@@ -57,10 +57,12 @@ object AIModule {
                                 name = "options",
                                 description = """The possible answers to the question, make them as diverse as possible and 
                                    sometimes as similar as possible such that it is not so easy to tell which answers are 
-                                   correct when a user is an advanced learner. The options should always be 4""".trimMargin(),
+                                   correct when a user is an advanced learner. The options should always be 4.""".trimMargin(),
                                 items = Schema.str(
                                     name = "option",
-                                    description = "An optional answer for the question"
+                                    description = """The list of options which contains a single correct answer and other 
+                                        options that look like possible answers but are not.
+                                        """.trimMargin()
                                 )
                             ),
                             Schema.str(

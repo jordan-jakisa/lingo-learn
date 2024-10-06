@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.Button
@@ -56,6 +56,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.kerustudios.lingolearn.R
 import com.kerustudios.lingolearn.ui.navigation.OnBoardingPage
+import com.kerustudios.lingolearn.ui.navigation.PracticePage
 
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -117,9 +118,14 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = {
+            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10"))
+        }) {
             Text(text = "Continue")
-            Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = "")
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = ""
+            )
         }
         Spacer(modifier = Modifier.height(32.dp))
 
