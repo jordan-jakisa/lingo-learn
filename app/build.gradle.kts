@@ -104,7 +104,6 @@ dependencies {
     kapt(libs.hilt.android.compiler)
 
     implementation(libs.androidx.hilt.navigation.compose)
-    //implementation("com.abdullahalhakimi:smoothmotion:1.0.0")
 
     implementation(libs.play.services.auth)
     implementation(libs.androidx.credentials.play.services.auth)

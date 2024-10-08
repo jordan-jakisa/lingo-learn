@@ -144,7 +144,10 @@ fun HomeScreen(
                     Card(
                         modifier = Modifier
                             .width(120.dp)
-                            .height(100.dp)
+                            .height(100.dp),
+                        onClick = {
+                            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic Food. Therefore include only scenarios around everyday encounters related to food  for example names of food, popular foods in german, recipes, restaurant etc"))
+                        }
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.ice_cream),
@@ -161,7 +164,11 @@ fun HomeScreen(
                     Card(
                         modifier = Modifier
                             .width(120.dp)
-                            .height(100.dp)
+                            .height(100.dp),
+                        onClick = {
+                            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the More food theme. Therefore include only scenarios around everyday encounters related to more food theme for example talking to someone who loves food, baking, preparing a feast, a party, etc"))
+
+                        }
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.cake),
@@ -178,7 +185,10 @@ fun HomeScreen(
                     Card(
                         modifier = Modifier
                             .width(120.dp)
-                            .height(100.dp)
+                            .height(100.dp),
+                        onClick = {
+                            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic Foodie. Therefore include only scenarios around everyday encounters related to a foodie  for example talking to someone who loves food, food exploration, etc"))
+                        }
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.sandwich),
@@ -196,7 +206,10 @@ fun HomeScreen(
                     Card(
                         modifier = Modifier
                             .width(120.dp)
-                            .height(100.dp)
+                            .height(100.dp),
+                        onClick = {
+                            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic food. Therefore include only scenarios around everyday encounters related to food  for example at a restaurant, at lunch time, at a eating place, etc"))
+                        }
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.coffee),
@@ -231,7 +244,10 @@ fun HomeScreen(
                     Card(
                         modifier = Modifier
                             .width(200.dp)
-                            .height(160.dp)
+                            .height(160.dp),
+                        onClick = {
+                            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic day tripper. Therefore include only scenarios around everyday encounters i may come across during the day for example interaction with a neighbour, in traffic, at my sons school, at lunch time at work, etc"))
+                        }
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.house),
@@ -249,7 +265,11 @@ fun HomeScreen(
                     Card(
                         modifier = Modifier
                             .width(200.dp)
-                            .height(160.dp)
+                            .height(160.dp),
+                        onClick = {
+                            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic airport and travel. Therefore include only scenarios around everyday encounters i may come across at the airport for example interaction with a hostess, at the airport obtaining a ticket, when is the plane arriving, cancelled flights, announcements, etc"))
+
+                        }
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.airport),

@@ -98,12 +98,6 @@ fun PracticeScreen(
                                 .fillMaxWidth()
                         ) {
                             CircularProgressIndicator()
-
-                            /*CircledDotsProgress(
-                                modifier = Modifier.size(90.dp),
-                                backgroundColor = Color.Gray.copy(alpha = 0.2f),
-                                color = MaterialTheme.colorScheme.primary,
-                            )   */
                         }
                     }
 
