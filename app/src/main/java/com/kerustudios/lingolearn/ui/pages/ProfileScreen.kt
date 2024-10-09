@@ -71,7 +71,10 @@ fun ProfileScreen(
         Text(text = uiState.user?.email ?: "", fontSize = 12.sp)
 
         Spacer(modifier = Modifier.height(32.dp))
-        ElevatedCard(onClick = { /*TODO*/ }, modifier = Modifier.padding(horizontal = 16.dp)) {
+        ElevatedCard(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
