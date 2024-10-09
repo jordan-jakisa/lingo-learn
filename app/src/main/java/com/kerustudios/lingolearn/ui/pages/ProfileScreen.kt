@@ -1,5 +1,6 @@
 package com.kerustudios.lingolearn.ui.pages
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +40,7 @@ fun ProfileScreen(
     vm: ProfileScreenViewModel = hiltViewModel()
 ) {
     val uiState by vm.uiState.collectAsState()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -72,7 +75,9 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
         ElevatedCard(
-            onClick = { /*TODO*/ },
+            onClick = {
+                Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show()
+            },
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
             Row(
@@ -90,8 +95,5 @@ fun ProfileScreen(
 
             }
         }
-
-
     }
-
 }

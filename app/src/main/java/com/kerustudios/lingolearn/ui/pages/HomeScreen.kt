@@ -128,11 +128,14 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(16.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             LinearProgressIndicator(
-                progress = { .2f }, gapSize = 2.dp, modifier = Modifier.width(90.dp)
+                progress = { ((uiState.user?.completedQuizzes?.size ?: 0) / 50).toFloat() },
+                gapSize = 2.dp,
+                modifier = Modifier.width(90.dp),
+                color = MaterialTheme.colorScheme.secondary
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "2/17",
+                text = "${uiState.user?.completedQuizzes?.size ?: 0}" + "/50",
                 modifier = Modifier.alpha(.5f),
                 style = MaterialTheme.typography.bodySmall
             )
@@ -141,7 +144,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(onClick = {
-            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10"))
+            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name ?: "German"} and my current  progress level is ${uiState.user?.completedQuizzes?.size ?: 0} /50"))
         }) {
             Text(text = "Continue")
             Icon(
@@ -164,7 +167,7 @@ fun HomeScreen(
                     Card(modifier = Modifier
                         .width(120.dp)
                         .height(100.dp), onClick = {
-                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic Food. Therefore include only scenarios around everyday encounters related to food  for example names of food, popular foods in german, recipes, restaurant etc"))
+                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is ${uiState.user?.completedQuizzes?.size ?: 0} /50. Create for me a scenario which involves the topic Food. Therefore include only scenarios around everyday encounters related to food  for example names of food, popular foods in german, recipes, restaurant etc"))
                     }) {
                         Image(
                             painter = painterResource(id = R.drawable.ice_cream),
@@ -181,7 +184,7 @@ fun HomeScreen(
                     Card(modifier = Modifier
                         .width(120.dp)
                         .height(100.dp), onClick = {
-                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the More food theme. Therefore include only scenarios around everyday encounters related to more food theme for example talking to someone who loves food, baking, preparing a feast, a party, etc"))
+                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is ${uiState.user?.completedQuizzes?.size ?: 0} /50. Create for me a scenario which involves the More food theme. Therefore include only scenarios around everyday encounters related to more food theme for example talking to someone who loves food, baking, preparing a feast, a party, etc"))
 
                     }) {
                         Image(
@@ -199,7 +202,7 @@ fun HomeScreen(
                     Card(modifier = Modifier
                         .width(120.dp)
                         .height(100.dp), onClick = {
-                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic Foodie. Therefore include only scenarios around everyday encounters related to a foodie  for example talking to someone who loves food, food exploration, etc"))
+                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is ${uiState.user?.completedQuizzes?.size ?: 0} /50. Create for me a scenario which involves the topic Foodie. Therefore include only scenarios around everyday encounters related to a foodie  for example talking to someone who loves food, food exploration, etc"))
                     }) {
                         Image(
                             painter = painterResource(id = R.drawable.sandwich),
@@ -217,7 +220,7 @@ fun HomeScreen(
                     Card(modifier = Modifier
                         .width(120.dp)
                         .height(100.dp), onClick = {
-                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic food. Therefore include only scenarios around everyday encounters related to food  for example at a restaurant, at lunch time, at a eating place, etc"))
+                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is ${uiState.user?.completedQuizzes?.size ?: 0} /50. Create for me a scenario which involves the topic food. Therefore include only scenarios around everyday encounters related to food  for example at a restaurant, at lunch time, at a eating place, etc"))
                     }) {
                         Image(
                             painter = painterResource(id = R.drawable.coffee),
@@ -251,7 +254,7 @@ fun HomeScreen(
                     Card(modifier = Modifier
                         .width(200.dp)
                         .height(160.dp), onClick = {
-                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic day tripper. Therefore include only scenarios around everyday encounters i may come across during the day for example interaction with a neighbour, in traffic, at my sons school, at lunch time at work, etc"))
+                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is ${uiState.user?.completedQuizzes?.size ?: 0} /50. Create for me a scenario which involves the topic day tripper. Therefore include only scenarios around everyday encounters i may come across during the day for example interaction with a neighbour, in traffic, at my sons school, at lunch time at work, etc"))
                     }) {
                         Image(
                             painter = painterResource(id = R.drawable.house),
@@ -269,7 +272,7 @@ fun HomeScreen(
                     Card(modifier = Modifier
                         .width(200.dp)
                         .height(160.dp), onClick = {
-                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic airport and travel. Therefore include only scenarios around everyday encounters i may come across at the airport for example interaction with a hostess, at the airport obtaining a ticket, when is the plane arriving, cancelled flights, announcements, etc"))
+                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is ${uiState.user?.completedQuizzes?.size ?: 0} /50. Create for me a scenario which involves the topic airport and travel. Therefore include only scenarios around everyday encounters i may come across at the airport for example interaction with a hostess, at the airport obtaining a ticket, when is the plane arriving, cancelled flights, announcements, etc"))
 
                     }) {
                         Image(
@@ -347,7 +350,8 @@ fun HomeCard(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    OutlinedTextField(value = topic,
+                    OutlinedTextField(
+                        value = topic,
                         onValueChange = { topic = it },
                         placeholder = { Text("Enter language to practice ...") },
                         shape = RoundedCornerShape(16.dp),
@@ -361,7 +365,8 @@ fun HomeCard(
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(12.dp))
                     ) {
-                        TextField(value = languageLevel,
+                        TextField(
+                            value = languageLevel,
                             onValueChange = {},
                             readOnly = true,
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropDownExpanded) },
