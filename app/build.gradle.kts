@@ -111,4 +111,6 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.google.firebase.auth)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.coil.compose)
+
 }

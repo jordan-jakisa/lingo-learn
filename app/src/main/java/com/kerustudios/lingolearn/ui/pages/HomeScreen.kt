@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
@@ -32,6 +33,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -54,16 +56,17 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.kerustudios.lingolearn.R
 import com.kerustudios.lingolearn.ui.navigation.OnBoardingPage
 import com.kerustudios.lingolearn.ui.navigation.PracticePage
+import com.kerustudios.lingolearn.ui.navigation.ProfilePage
 
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
-    navController: NavHostController,
-    vm: HomeScreenViewModel = hiltViewModel()
+    navController: NavHostController, vm: HomeScreenViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val uiState by vm.uiState.collectAsState()
@@ -81,17 +84,38 @@ fun HomeScreen(
             .fillMaxSize()
     ) {
         Spacer(modifier = Modifier.height(32.dp))
-        Box(
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onBackground.copy(alpha = .25f))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = uiState.user?.language?.emoji ?: "",
-                fontSize = 24.sp,
-                modifier = Modifier.padding(4.dp)
-            )
+            Box(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.onBackground.copy(alpha = .25f))
+            ) {
+                Text(
+                    text = uiState.user?.language?.emoji ?: "",
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(4.dp)
+                )
+            }
+
+            OutlinedCard(
+                onClick = { navController.navigate(ProfilePage) },
+                shape = CircleShape,
+                modifier = Modifier.size(54.dp)
+            ) {
+                AsyncImage(
+                    model = uiState.user?.picture ?: "",
+                    contentDescription = "",
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .fillMaxSize()
+                )
+            }
         }
+
         Spacer(modifier = Modifier.height(32.dp))
         Text(text = "FOUNDATION", fontSize = 12.sp, style = MaterialTheme.typography.titleMedium)
         Text(
@@ -104,9 +128,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(16.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             LinearProgressIndicator(
-                progress = { .2f },
-                gapSize = 2.dp,
-                modifier = Modifier.width(90.dp)
+                progress = { .2f }, gapSize = 2.dp, modifier = Modifier.width(90.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
@@ -123,8 +145,7 @@ fun HomeScreen(
         }) {
             Text(text = "Continue")
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = ""
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = ""
             )
         }
         Spacer(modifier = Modifier.height(32.dp))
@@ -136,19 +157,15 @@ fun HomeScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
                 Column {
-                    Card(
-                        modifier = Modifier
-                            .width(120.dp)
-                            .height(100.dp),
-                        onClick = {
-                            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic Food. Therefore include only scenarios around everyday encounters related to food  for example names of food, popular foods in german, recipes, restaurant etc"))
-                        }
-                    ) {
+                    Card(modifier = Modifier
+                        .width(120.dp)
+                        .height(100.dp), onClick = {
+                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic Food. Therefore include only scenarios around everyday encounters related to food  for example names of food, popular foods in german, recipes, restaurant etc"))
+                    }) {
                         Image(
                             painter = painterResource(id = R.drawable.ice_cream),
                             contentDescription = "",
@@ -161,15 +178,12 @@ fun HomeScreen(
             }
             item {
                 Column {
-                    Card(
-                        modifier = Modifier
-                            .width(120.dp)
-                            .height(100.dp),
-                        onClick = {
-                            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the More food theme. Therefore include only scenarios around everyday encounters related to more food theme for example talking to someone who loves food, baking, preparing a feast, a party, etc"))
+                    Card(modifier = Modifier
+                        .width(120.dp)
+                        .height(100.dp), onClick = {
+                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the More food theme. Therefore include only scenarios around everyday encounters related to more food theme for example talking to someone who loves food, baking, preparing a feast, a party, etc"))
 
-                        }
-                    ) {
+                    }) {
                         Image(
                             painter = painterResource(id = R.drawable.cake),
                             contentDescription = "",
@@ -182,14 +196,11 @@ fun HomeScreen(
             }
             item {
                 Column {
-                    Card(
-                        modifier = Modifier
-                            .width(120.dp)
-                            .height(100.dp),
-                        onClick = {
-                            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic Foodie. Therefore include only scenarios around everyday encounters related to a foodie  for example talking to someone who loves food, food exploration, etc"))
-                        }
-                    ) {
+                    Card(modifier = Modifier
+                        .width(120.dp)
+                        .height(100.dp), onClick = {
+                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic Foodie. Therefore include only scenarios around everyday encounters related to a foodie  for example talking to someone who loves food, food exploration, etc"))
+                    }) {
                         Image(
                             painter = painterResource(id = R.drawable.sandwich),
                             contentDescription = "",
@@ -203,14 +214,11 @@ fun HomeScreen(
             }
             item {
                 Column {
-                    Card(
-                        modifier = Modifier
-                            .width(120.dp)
-                            .height(100.dp),
-                        onClick = {
-                            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic food. Therefore include only scenarios around everyday encounters related to food  for example at a restaurant, at lunch time, at a eating place, etc"))
-                        }
-                    ) {
+                    Card(modifier = Modifier
+                        .width(120.dp)
+                        .height(100.dp), onClick = {
+                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic food. Therefore include only scenarios around everyday encounters related to food  for example at a restaurant, at lunch time, at a eating place, etc"))
+                    }) {
                         Image(
                             painter = painterResource(id = R.drawable.coffee),
                             contentDescription = "",
@@ -236,19 +244,15 @@ fun HomeScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
                 Column {
-                    Card(
-                        modifier = Modifier
-                            .width(200.dp)
-                            .height(160.dp),
-                        onClick = {
-                            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic day tripper. Therefore include only scenarios around everyday encounters i may come across during the day for example interaction with a neighbour, in traffic, at my sons school, at lunch time at work, etc"))
-                        }
-                    ) {
+                    Card(modifier = Modifier
+                        .width(200.dp)
+                        .height(160.dp), onClick = {
+                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic day tripper. Therefore include only scenarios around everyday encounters i may come across during the day for example interaction with a neighbour, in traffic, at my sons school, at lunch time at work, etc"))
+                    }) {
                         Image(
                             painter = painterResource(id = R.drawable.house),
                             contentDescription = "",
@@ -262,15 +266,12 @@ fun HomeScreen(
             }
             item {
                 Column {
-                    Card(
-                        modifier = Modifier
-                            .width(200.dp)
-                            .height(160.dp),
-                        onClick = {
-                            navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic airport and travel. Therefore include only scenarios around everyday encounters i may come across at the airport for example interaction with a hostess, at the airport obtaining a ticket, when is the plane arriving, cancelled flights, announcements, etc"))
+                    Card(modifier = Modifier
+                        .width(200.dp)
+                        .height(160.dp), onClick = {
+                        navController.navigate(PracticePage(topic = "I want to practice ${uiState.user?.language?.name} and my current  progress level is 1/10. Create for me a scenario which involves the topic airport and travel. Therefore include only scenarios around everyday encounters i may come across at the airport for example interaction with a hostess, at the airport obtaining a ticket, when is the plane arriving, cancelled flights, announcements, etc"))
 
-                        }
-                    ) {
+                    }) {
                         Image(
                             painter = painterResource(id = R.drawable.airport),
                             contentDescription = "",
@@ -281,6 +282,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(text = "Airport")
                 }
+                1
             }
         }
 
@@ -345,8 +347,7 @@ fun HomeCard(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    OutlinedTextField(
-                        value = topic,
+                    OutlinedTextField(value = topic,
                         onValueChange = { topic = it },
                         placeholder = { Text("Enter language to practice ...") },
                         shape = RoundedCornerShape(16.dp),
@@ -360,8 +361,7 @@ fun HomeCard(
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(12.dp))
                     ) {
-                        TextField(
-                            value = languageLevel,
+                        TextField(value = languageLevel,
                             onValueChange = {},
                             readOnly = true,
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropDownExpanded) },
@@ -396,13 +396,11 @@ fun HomeCard(
                         }
                     }
                     Spacer(modifier = Modifier.width(16.dp))
-                    Button(
-                        shape = RoundedCornerShape(12.dp),
+                    Button(shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(44.dp),
-                        onClick = { onClick("$languageLevel $topic") }
-                    ) {
+                        onClick = { onClick("$languageLevel $topic") }) {
                         Text(text = "Start Practice")
                     }
 

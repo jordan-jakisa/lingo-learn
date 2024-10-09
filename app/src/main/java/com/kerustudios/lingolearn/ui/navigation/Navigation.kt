@@ -12,6 +12,7 @@ import com.kerustudios.lingolearn.ui.pages.AuthScreen
 import com.kerustudios.lingolearn.ui.pages.HomeScreen
 import com.kerustudios.lingolearn.ui.pages.OnBoardingScreen
 import com.kerustudios.lingolearn.ui.pages.PracticeScreen
+import com.kerustudios.lingolearn.ui.pages.ProfileScreen
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -37,6 +38,10 @@ fun Navigation(navController: NavHostController, modifier: Modifier = Modifier) 
         composable<OnBoardingPage> {
             OnBoardingScreen(navController, modifier)
         }
+
+        composable<ProfilePage> {
+            ProfileScreen(navController, modifier)
+        }
     }
 }
 
@@ -53,3 +58,6 @@ data object AuthPage
 
 @Serializable
 data object OnBoardingPage
+
+@Serializable
+data object ProfilePage
