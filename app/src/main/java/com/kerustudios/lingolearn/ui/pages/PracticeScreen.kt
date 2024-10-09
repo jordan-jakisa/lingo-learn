@@ -140,8 +140,7 @@ fun PracticeScreen(
                             QuizCard(
                                 question = question.copy(
                                     options = question.options.shuffled()
-                                ),
-                                isLastPage = index == questions.size - 1
+                                ), isLastPage = index == questions.size - 1
                             ) {
                                 coroutineScope.launch {
                                     if (index < questions.size - 1) {
@@ -218,10 +217,9 @@ fun QuizCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = if (selectedAnswer.isCorrect(question.answer)) "The correct answer is: ${question.answer}" else "You got that wrong, the correct answer is: ${question.answer}",
+                            text = if (selectedAnswer.isCorrect(question.answer)) "The correct answer is: ${question.answer}" else "You got that wrong.\n\nThe correct answer is: ${question.answer} \n\nExplanation: ${question.explanation}",
                             modifier = Modifier.weight(1f),
-
-                            )
+                        )
                         Spacer(modifier = Modifier.width(16.dp))
                         Icon(
                             imageVector = if (selectedAnswer.isCorrect(question.answer)) Icons.Rounded.CheckCircle else Icons.Rounded.Close,

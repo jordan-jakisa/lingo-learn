@@ -68,6 +68,10 @@ object AIModule {
                             Schema.str(
                                 name = "answer",
                                 description = "The correct answer to the question",
+                            ),
+                            Schema.str(
+                                name = "explanation",
+                                description = "A short explanation of why the correct answer is correct. Usually just provide a correct translation of the correct answer in english and only provide an explanation when necessary",
                             )
                         )
                     )

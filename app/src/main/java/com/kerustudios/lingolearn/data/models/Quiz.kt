@@ -4,7 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class QuizQuestion(
-    val question: String,
-    val options: List<String>,
-    val answer: String
+    val question: String = "",
+    val options: List<String> = emptyList(),
+    val answer: String = "",
+    val explanation: String = ""
 )
