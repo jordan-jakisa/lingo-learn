@@ -42,8 +42,6 @@ android {
             "WEB_CLIENT_ID",
             properties.getProperty("WEB_CLIENT_ID").toString()
         )
-
-
     }
 
     buildTypes {
